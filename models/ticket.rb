@@ -26,6 +26,20 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
+  def re_customer(new_customer_id)
+    @customer_id = new_customer_id
+    sql = "UPDATE tickets SET customer_id = $1 WHERE id = $2"
+    values = [@customer_id, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def re_film(new_film_id)
+    @film_id = new_film_id
+    sql = "UPDATE tickets SET film_id = $1 WHERE id = $2"
+    values = [@film_id, @id]
+    SqlRunner.run(sql, values)
+  end
+
   def self.delete_all()
     sql = "DELETE FROM tickets"
     SqlRunner.run(sql)
