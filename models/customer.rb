@@ -53,10 +53,22 @@ class Customer
     return Film.map_items(films)
   end
 
+  def too_broke_to_see_film?(film)
+    return @funds < film.price
+  end
+
   def buy_ticket(film)
+    return if self.too_broke_to_see_film?(film)
     self.adjust_funds_by(-film.price)
     ticket = Ticket.new({'customer_id' => @id, 'film_id' => film.id})
     ticket.save
+  end
+
+  def count_tickets()
+    sql = "SELECT films.* FROM films INNER JOIN tickets ON tickets.film_id = films.id WHERE customer_id = $1;"
+    values = [@id]
+    films = SqlRunner.run(sql, values)
+    return Film.map_items(films).count
   end
 
   def self.delete_all()
