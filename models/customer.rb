@@ -53,6 +53,12 @@ class Customer
     return Film.map_items(films)
   end
 
+  def buy_ticket(film)
+    self.adjust_funds_by(-film.price)
+    ticket = Ticket.new({'customer_id' => @id, 'film_id' => film.id})
+    ticket.save
+  end
+
   def self.delete_all()
     sql = "DELETE FROM customers"
     SqlRunner.run(sql)
