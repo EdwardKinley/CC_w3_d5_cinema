@@ -25,6 +25,34 @@ class Film
     SqlRunner.run(sql, values)
   end
 
+  def retitle(new_title)
+    @title = new_title
+    sql = "UPDATE films SET title = $1 WHERE id = $2"
+    values = [@title, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def reprice_to(new_price)
+    @price = new_price
+    sql = "UPDATE films SET price = $1 WHERE id = $2"
+    values = [@price, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def reprice_by(adjustment)
+    @price += adjustment
+    sql = "UPDATE films SET price = $1 WHERE id = $2"
+    values = [@price, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def reprice_multiple(multiplier)
+    @price = (@price*multiplier).to_i
+    sql = "UPDATE films SET price = $1 WHERE id = $2"
+    values = [@price, @id]
+    SqlRunner.run(sql, values)
+  end
+
   def self.delete_all()
     sql = "DELETE FROM films"
     SqlRunner.run(sql)

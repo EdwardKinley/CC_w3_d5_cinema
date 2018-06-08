@@ -32,15 +32,15 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
-  def adjust_funds_to(amount)
-    @funds = amount
+  def adjust_funds_to(new_total)
+    @funds = new_total
     sql = "UPDATE customers SET funds = $1 WHERE id = $2"
     values = [@funds, @id]
     SqlRunner.run(sql, values)
   end
 
-  def adjust_funds_by(amount)
-    @funds += amount
+  def adjust_funds_by(adjustment)
+    @funds += adjustment
     sql = "UPDATE customers SET funds = $1 WHERE id = $2"
     values = [@funds, @id]
     SqlRunner.run(sql, values)
