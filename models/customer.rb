@@ -25,6 +25,27 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
+  def rename(new_name)
+    @name = new_name
+    sql = "UPDATE customers SET name = $1 WHERE id = $2"
+    values = [@name, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def adjust_funds_to(amount)
+    @funds = amount
+    sql = "UPDATE customers SET funds = $1 WHERE id = $2"
+    values = [@funds, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def adjust_funds_by(amount)
+    @funds += amount
+    sql = "UPDATE customers SET funds = $1 WHERE id = $2"
+    values = [@funds, @id]
+    SqlRunner.run(sql, values)
+  end
+
   def self.delete_all()
     sql = "DELETE FROM customers"
     SqlRunner.run(sql)
