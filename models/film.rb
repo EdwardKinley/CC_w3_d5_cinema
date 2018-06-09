@@ -4,17 +4,16 @@ require_relative('customer.rb')
 class Film
 
   attr_reader(:id)
-  attr_accessor(:title, :price)
+  attr_accessor(:title)
 
   def initialize(parameters)
     @id = parameters['id'].to_i if parameters['id']
     @title = parameters['title']
-    @price = parameters['price'].to_i
   end
 
   def save()
-    sql = "INSERT INTO films (title, price) VALUES ($1, $2) RETURNING id"
-    values = [@title, @price]
+    sql = "INSERT INTO films (title) VALUES ($1) RETURNING id"
+    values = [@title]
     film = SqlRunner.run(sql, values).first
     @id = film['id'].to_i
   end
@@ -30,41 +29,6 @@ class Film
     sql = "UPDATE films SET title = $1 WHERE id = $2"
     values = [@title, @id]
     SqlRunner.run(sql, values)
-  end
-
-  def reprice_to(new_price)
-    @price = new_price
-    sql = "UPDATE films SET price = $1 WHERE id = $2"
-    values = [@price, @id]
-    SqlRunner.run(sql, values)
-  end
-
-  def reprice_by(adjustment)
-    @price += adjustment
-    sql = "UPDATE films SET price = $1 WHERE id = $2"
-    values = [@price, @id]
-    SqlRunner.run(sql, values)
-  end
-
-  def reprice_multiple(multiplier)
-    @price = (@price*multiplier).to_i
-    sql = "UPDATE films SET price = $1 WHERE id = $2"
-    values = [@price, @id]
-    SqlRunner.run(sql, values)
-  end
-
-  def customers()
-    sql = "SELECT customers.* FROM customers INNER JOIN tickets ON tickets.customer_id = customers.id WHERE film_id = $1"
-    values = [@id]
-    customers = SqlRunner.run(sql, values)
-    return Customer.map_items(customers)
-  end
-
-  def count_tickets()
-    sql = "SELECT customers.* FROM customers INNER JOIN tickets ON tickets.customer_id = customers.id WHERE film_id = $1"
-    values = [@id]
-    customers = SqlRunner.run(sql, values)
-    return Customer.map_items(customers).count
   end
 
   def self.delete_all()

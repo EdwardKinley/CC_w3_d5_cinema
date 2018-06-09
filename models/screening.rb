@@ -1,21 +1,23 @@
 require_relative('../db/sql_runner.rb')
 require_relative('ticket.rb')
+require_relative('film.rb')
 
 class Screening
 
   attr_reader(:id)
-  attr_accessor(:film_id, :time, :capacity)
+  attr_accessor(:film_id, :time, :price, :capacity)
 
   def initialize(parameters)
     @id = parameters['id'].to_i
     @film_id = parameters['film_id'].to_i
     @time = parameters['time']
+    @price = parameters['price'].to_i
     @capacity = parameters['capacity']
   end
 
   def save()
-    sql = "INSERT INTO screenings (film_id, time, capacity) VALUES ($1, $2, $3) RETURNING id"
-    values = [@film_id, @time, @capacity]
+    sql = "INSERT INTO screenings (film_id, time, price, capacity) VALUES ($1, $2, $3, $4) RETURNING id"
+    values = [@film_id, @time, @price, @capacity]
     screening = SqlRunner.run(sql, values).first
     @id = screening['id'].to_i
   end
@@ -40,11 +42,46 @@ class Screening
     SqlRunner.run(sql, values)
   end
 
+  def reprice_to(new_price)
+    @price = new_price
+    sql = "UPDATE screenings SET price = $1 WHERE id = $2"
+    values = [@price, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def reprice_by(adjustment)
+    @price += adjustment
+    sql = "UPDATE screenings SET price = $1 WHERE id = $2"
+    values = [@price, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def reprice_multiple(multiplier)
+    @price = (@price*multiplier).to_i
+    sql = "UPDATE screenings SET price = $1 WHERE id = $2"
+    values = [@price, @id]
+    SqlRunner.run(sql, values)
+  end
+
   def re_capacity(new_capacity)
     @capacity = new_capacity
     sql = "UPDATE screenings SET capacity = $1 WHERE id = $2"
     values = [@capacity, @id]
     SqlRunner.run(sql, values)
+  end
+
+  def customers()
+    sql = "SELECT customers.* FROM customers INNER JOIN tickets ON tickets.customer_id = customers.id WHERE screening_id = $1"
+    values = [@id]
+    customers = SqlRunner.run(sql, values)
+    return Customer.map_items(customers)
+  end
+
+  def count_tickets()
+    sql = "SELECT customers.* FROM customers INNER JOIN tickets ON tickets.customer_id = customers.id WHERE screening_id = $1"
+    values = [@id]
+    customers = SqlRunner.run(sql, values)
+    return Customer.map_items(customers).count
   end
 
   def self.delete_all()

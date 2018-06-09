@@ -11,19 +11,19 @@ CREATE TABLE customers (
 
 CREATE TABLE films (
   id SERIAL2 PRIMARY KEY,
-  title VARCHAR(255),
-  price INT2
+  title VARCHAR(255)
 );
 
 CREATE TABLE screenings (
   id SERIAL2 PRIMARY KEY,
   film_id INT2 REFERENCES films(id) ON DELETE CASCADE,
   time VARCHAR(255),
+  price INT2,
   capacity INT2
 );
 
 CREATE TABLE tickets (
   id SERIAL2 PRIMARY KEY,
   customer_id INT2 REFERENCES customers(id) ON DELETE CASCADE,
-  film_id INT2 REFERENCES films(id) ON DELETE CASCADE
+  screening_id INT2 REFERENCES screenings(id) ON DELETE CASCADE
 );
