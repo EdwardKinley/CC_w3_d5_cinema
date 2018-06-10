@@ -10,7 +10,7 @@ Screening.delete_all()
 Film.delete_all()
 Customer.delete_all()
 
-customer1 = Customer.new({'name' => 'Albert', 'funds' => 2000})
+customer1 = Customer.new({'name' => 'Albert', 'funds' => 4400})
 customer1.save()
 
 customer2 = Customer.new({'name' => 'Brenda', 'funds' => 4500})
@@ -55,41 +55,18 @@ screening6.save()
 screening7 = Screening.new({'film_id' => film4.id, 'time' => '23:30', 'price' => 850, 'capacity' => 3})
 screening7.save()
 
-ticket1 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => screening1.id})
-ticket1.save()
-
-ticket2 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => screening2.id})
-ticket2.save()
-
-ticket3 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => screening3.id})
-ticket3.save()
-
-ticket4 = Ticket.new({'customer_id' => customer3.id, 'screening_id' => screening3.id})
-ticket4.save()
-
-ticket5 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => screening4.id})
-ticket5.save()
-
-ticket6 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => screening5.id})
-ticket6.save()
-
-ticket7 = Ticket.new({'customer_id' => customer3.id, 'screening_id' => screening6.id})
-ticket7.save()
-
-ticket8 = Ticket.new({'customer_id' => customer4.id, 'screening_id' => screening5.id})
-ticket8.save()
-
-ticket9 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => screening5.id})
-ticket9.save()
-
-ticket10 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => screening6.id})
-ticket10.save()
-
-ticket11 = Ticket.new({'customer_id' => customer3.id, 'screening_id' => screening7.id})
-ticket11.save()
-
-ticket12 = Ticket.new({'customer_id' => customer4.id, 'screening_id' => screening7.id})
-ticket12.save()
+ticket1 = customer1.buy_ticket(screening1)
+ticket2 = customer1.buy_ticket(screening2)
+ticket3 = customer1.buy_ticket(screening4)
+ticket4 = customer2.buy_ticket(screening5)
+ticket5 = customer3.buy_ticket(screening6)
+ticket6 = customer4.buy_ticket(screening5)
+ticket7 = customer1.buy_ticket(screening5)
+ticket8 = customer2.buy_ticket(screening6)
+ticket9 = customer3.buy_ticket(screening7)
+ticket10 = customer4.buy_ticket(screening7)
+ticket11 = customer2.buy_ticket(screening7)
+ticket12 = customer3.buy_ticket(screening5)
 
 binding.pry
 nil

@@ -58,10 +58,11 @@ class Customer
   end
 
   def buy_ticket(screening)
-    return if self.too_broke_to_see_screening?(screening)
+    return 'Insufficient funds!' if self.too_broke_to_see_screening?(screening)
     self.adjust_funds_by(-screening.price)
     ticket = Ticket.new({'customer_id' => @id, 'screening_id' => screening.id})
     ticket.save
+    return ticket
   end
 
   def count_tickets()

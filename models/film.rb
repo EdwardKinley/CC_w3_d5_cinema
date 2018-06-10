@@ -1,6 +1,7 @@
 require_relative('../db/sql_runner.rb')
 require_relative('customer.rb')
 
+
 class Film
 
   attr_reader(:id)
@@ -29,6 +30,21 @@ class Film
     sql = "UPDATE films SET title = $1 WHERE id = $2"
     values = [@title, @id]
     SqlRunner.run(sql, values)
+  end
+
+  def screenings()
+    sql = "SELECT * FROM screenings WHERE film_id = $1"
+    values = [@id]
+    screenings = SqlRunner.run(sql, values)
+    return Screening.map_items(screenings)
+  end
+
+  def most_popular_screenings()
+    screenings = self.screenings
+    most_popular_screenings = []
+    max = screenings.map{|screening| screening.count_tickets}.max()
+    screenings.each{|screening| most_popular_screenings.push(screening) if screening.count_tickets == max}
+    return most_popular_screenings
   end
 
   def self.delete_all()
