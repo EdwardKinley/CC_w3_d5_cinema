@@ -5,19 +5,19 @@ require_relative('film.rb')
 class Screening
 
   attr_reader(:id)
-  attr_accessor(:film_id, :time, :price, :capacity)
+  attr_accessor(:film_id, :time, :price, :vacant_seats)
 
   def initialize(parameters)
     @id = parameters['id'].to_i
     @film_id = parameters['film_id'].to_i
     @time = parameters['time']
     @price = parameters['price'].to_i
-    @capacity = parameters['capacity']
+    @vacant_seats = parameters['vacant_seats']
   end
 
   def save()
-    sql = "INSERT INTO screenings (film_id, time, price, capacity) VALUES ($1, $2, $3, $4) RETURNING id"
-    values = [@film_id, @time, @price, @capacity]
+    sql = "INSERT INTO screenings (film_id, time, price, vacant_seats) VALUES ($1, $2, $3, $4) RETURNING id"
+    values = [@film_id, @time, @price, @vacant_seats]
     screening = SqlRunner.run(sql, values).first
     @id = screening['id'].to_i
   end
@@ -63,10 +63,21 @@ class Screening
     SqlRunner.run(sql, values)
   end
 
-  def re_capacity(new_capacity)
-    @capacity = new_capacity
-    sql = "UPDATE screenings SET capacity = $1 WHERE id = $2"
-    values = [@capacity, @id]
+  def sold_out?()
+    return @vacant_seats == 0
+  end
+
+  def reduce_vacant_seats_by_one()
+    @vacant_seats -= 1
+    sql = "UPDATE screenings SET vacant_seats = $1 WHERE id = $2"
+    values = [@vacant_seats, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def re_vacant_seats(new_vacant_seats)
+    @vacant_seats = new_vacant_seats
+    sql = "UPDATE screenings SET vacant_seats = $1 WHERE id = $2"
+    values = [@vacant_seats, @id]
     SqlRunner.run(sql, values)
   end
 

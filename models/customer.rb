@@ -1,5 +1,6 @@
 require_relative('../db/sql_runner.rb')
 require_relative('ticket.rb')
+require_relative('screening.rb')
 
 class Customer
 
@@ -58,10 +59,12 @@ class Customer
   end
 
   def buy_ticket(screening)
+    return 'Sold out!' if screening.sold_out?()
     return 'Insufficient funds!' if self.too_broke_to_see_screening?(screening)
     self.adjust_funds_by(-screening.price)
     ticket = Ticket.new({'customer_id' => @id, 'screening_id' => screening.id})
-    ticket.save
+    ticket.save()
+    screening.reduce_vacant_seats_by_one()
     return ticket
   end
 

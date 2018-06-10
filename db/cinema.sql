@@ -19,7 +19,7 @@ CREATE TABLE screenings (
   film_id INT2 REFERENCES films(id) ON DELETE CASCADE,
   time VARCHAR(255),
   price INT2,
-  capacity INT2
+  vacant_seats INT2
 );
 
 CREATE TABLE tickets (

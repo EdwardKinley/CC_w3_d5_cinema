@@ -34,25 +34,25 @@ film3.save()
 film4 = Film.new({'title' => 'Dead Man'})
 film4.save()
 
-screening1 = Screening.new({'film_id' => film1.id, 'time' => '18:45', 'price' => 800, 'capacity' => 50})
+screening1 = Screening.new({'film_id' => film1.id, 'time' => '18:45', 'price' => 800, 'vacant_seats' => 50})
 screening1.save()
 
-screening2 = Screening.new({'film_id' => film1.id, 'time' => '21:00', 'price' => 1100, 'capacity' => 40})
+screening2 = Screening.new({'film_id' => film1.id, 'time' => '21:00', 'price' => 1100, 'vacant_seats' => 40})
 screening2.save()
 
-screening3 = Screening.new({'film_id' => film2.id, 'time' => '19:00', 'price' => 1000, 'capacity' => 60})
+screening3 = Screening.new({'film_id' => film2.id, 'time' => '19:00', 'price' => 1000, 'vacant_seats' => 60})
 screening3.save()
 
-screening4 = Screening.new({'film_id' => film3.id, 'time' => '17:30', 'price' => 1200, 'capacity' => 55})
+screening4 = Screening.new({'film_id' => film3.id, 'time' => '17:30', 'price' => 1200, 'vacant_seats' => 55})
 screening4.save()
 
-screening5 = Screening.new({'film_id' => film3.id, 'time' => '18:00', 'price' => 1200, 'capacity' => 38})
+screening5 = Screening.new({'film_id' => film3.id, 'time' => '18:00', 'price' => 1200, 'vacant_seats' => 38})
 screening5.save()
 
-screening6 = Screening.new({'film_id' => film4.id, 'time' => '19:30', 'price' => 950, 'capacity' => 90})
+screening6 = Screening.new({'film_id' => film4.id, 'time' => '19:30', 'price' => 950, 'vacant_seats' => 90})
 screening6.save()
 
-screening7 = Screening.new({'film_id' => film4.id, 'time' => '23:30', 'price' => 850, 'capacity' => 3})
+screening7 = Screening.new({'film_id' => film4.id, 'time' => '23:30', 'price' => 850, 'vacant_seats' => 3})
 screening7.save()
 
 ticket1 = customer1.buy_ticket(screening1)
